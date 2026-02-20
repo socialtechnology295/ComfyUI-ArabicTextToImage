@@ -1,0 +1,11 @@
+# متطلبات عقدة Arabic Text to Image v2
+# Arabic Text to Image Node Requirements
+
+# ── الترجمة الأونلاين (Google) ────────────────────
+# Required for online translation via Google
+deep-translator>=1.11.4
+
+# ── الترجمة الأوفلاين (بدون إنترنت) ─────────────
+# Required for offline translation (no internet needed)
+# تحميل حزمة اللغة: سيتم تلقائياً عند أول استخدام
+argostranslate>=1.9.1

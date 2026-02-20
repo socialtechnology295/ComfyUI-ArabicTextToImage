@@ -1,0 +1,207 @@
+{
+  "last_node_id": 8,
+  "last_link_id": 12,
+  "nodes": [
+
+    {
+      "id": 1,
+      "type": "CheckpointLoaderSimple",
+      "pos": [40, 200],
+      "size": [315, 98],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "outputs": [
+        { "name": "MODEL", "type": "MODEL", "links": [1],  "slot_index": 0 },
+        { "name": "CLIP",  "type": "CLIP",  "links": [2],  "slot_index": 1 },
+        { "name": "VAE",   "type": "VAE",   "links": [3],  "slot_index": 2 }
+      ],
+      "properties": { "Node name for S&R": "CheckpointLoaderSimple" },
+      "widgets_values": ["v1-5-pruned-emaonly.ckpt"]
+    },
+
+    {
+      "id": 2,
+      "type": "ArabicPromptBuilder",
+      "pos": [40, 380],
+      "size": [400, 220],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "outputs": [
+        { "name": "prompt", "type": "STRING", "links": [4], "slot_index": 0 }
+      ],
+      "properties": { "Node name for S&R": "ArabicPromptBuilder" },
+      "widgets_values": [
+        "امرأة عربية جميلة بملابس عصرية أنيقة",
+        "مدينة مستقبلية ليلية، أضواء نيون ملونة، انعكاسات على الأرض",
+        "Ultra Quality (جودة فائقة)",
+        "detailed face, perfect eyes, photorealistic skin"
+      ]
+    },
+
+    {
+      "id": 3,
+      "type": "ArabicTextToImage",
+      "pos": [480, 80],
+      "size": [500, 700],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        { "name": "model",           "type": "MODEL",  "link": 1 },
+        { "name": "clip",            "type": "CLIP",   "link": 2 },
+        { "name": "vae",             "type": "VAE",    "link": 3 },
+        { "name": "positive_prompt", "type": "STRING", "link": 4 }
+      ],
+      "outputs": [
+        { "name": "IMAGE",         "type": "IMAGE",  "links": [5],  "slot_index": 0 },
+        { "name": "LATENT",        "type": "LATENT", "links": [6],  "slot_index": 1 },
+        { "name": "positive_text", "type": "STRING", "links": [7],  "slot_index": 2 },
+        { "name": "negative_text", "type": "STRING", "links": [8],  "slot_index": 3 }
+      ],
+      "properties": { "Node name for S&R": "ArabicTextToImage" },
+      "widgets_values": [
+        "*** connected from ArabicPromptBuilder ***",
+        "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, ugly, distorted, deformed, disfigured",
+        "768 × 1024 [Portrait SDXL]",
+        768,
+        1024,
+        30,
+        7.5,
+        "dpmpp_2m",
+        "karras",
+        1.0,
+        42
+      ]
+    },
+
+    {
+      "id": 4,
+      "type": "SaveImage",
+      "pos": [1020, 80],
+      "size": [420, 520],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        { "name": "images", "type": "IMAGE", "link": 5 }
+      ],
+      "properties": { "Node name for S&R": "SaveImage" },
+      "widgets_values": ["arabic_t2i/output"]
+    },
+
+    {
+      "id": 5,
+      "type": "PreviewImage",
+      "pos": [1020, 640],
+      "size": [420, 300],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        { "name": "images", "type": "IMAGE", "link": 9 }
+      ],
+      "properties": { "Node name for S&R": "PreviewImage" }
+    },
+
+    {
+      "id": 6,
+      "type": "Note",
+      "pos": [40, 640],
+      "size": [420, 180],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "properties": {},
+      "widgets_values": [
+        "📋 تعليمات الاستخدام:\n\n1️⃣ في CheckpointLoaderSimple:\n   اختر النموذج (مثال: v1-5 أو SDXL)\n\n2️⃣ في Arabic Prompt Builder:\n   اكتب موضوع الصورة والبيئة واختر الأسلوب\n\n3️⃣ في Arabic Text to Image:\n   اضبط الأبعاد والإعدادات\n   اضغط Queue Prompt لتوليد الصورة ✨"
+      ]
+    },
+
+    {
+      "id": 7,
+      "type": "Note",
+      "pos": [480, 810],
+      "size": [500, 120],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "properties": {},
+      "widgets_values": [
+        "💡 نصيحة: يمكنك توصيل positive_prompt مباشرة من الـ ArabicPromptBuilder أو الكتابة يدوياً في الحقل.\nلتغيير النموذج: عدّل CheckpointLoaderSimple واختر الملف المناسب من مجلد models/checkpoints"
+      ]
+    },
+
+    {
+      "id": 8,
+      "type": "ImageSharpen",
+      "pos": [1020, 430],
+      "size": [315, 82],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        { "name": "image", "type": "IMAGE", "link": 10 }
+      ],
+      "outputs": [
+        { "name": "IMAGE", "type": "IMAGE", "links": [9, 11], "slot_index": 0 }
+      ],
+      "properties": { "Node name for S&R": "ImageSharpen" },
+      "widgets_values": [1.5, 1.0, 10]
+    }
+
+  ],
+
+  "links": [
+    [1,  1, 0, 3, 0, "MODEL"],
+    [2,  1, 1, 3, 1, "CLIP"],
+    [3,  1, 2, 3, 2, "VAE"],
+    [4,  2, 0, 3, 3, "STRING"],
+    [5,  3, 0, 4, 0, "IMAGE"],
+    [6,  3, 1, 8, 0, "LATENT"],
+    [7,  3, 2, 7, 0, "STRING"],
+    [8,  3, 3, 7, 1, "STRING"],
+    [9,  8, 0, 5, 0, "IMAGE"],
+    [10, 3, 0, 8, 0, "IMAGE"],
+    [11, 8, 0, 4, 0, "IMAGE"]
+  ],
+
+  "groups": [
+    {
+      "title": "📥 مرحلة التحميل  |  Loading Stage",
+      "bounding": [20, 160, 450, 480],
+      "color": "#1a3a2a",
+      "font_size": 14
+    },
+    {
+      "title": "🎨 مرحلة التوليد  |  Generation Stage",
+      "bounding": [460, 50, 540, 900],
+      "color": "#1a1a3a",
+      "font_size": 14
+    },
+    {
+      "title": "💾 مرحلة الحفظ  |  Save Stage",
+      "bounding": [990, 50, 460, 920],
+      "color": "#2a1a1a",
+      "font_size": 14
+    }
+  ],
+
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale":   0.75,
+      "offset":  [0, 0]
+    },
+    "info": {
+      "name":        "Arabic Professional Text-to-Image Workflow",
+      "author":      "Arabic ComfyUI Community",
+      "description": "Workflow احترافي لتوليد الصور من النص مع دعم كامل للعربية",
+      "version":     "1.0.0",
+      "created":     "2026-02-19"
+    }
+  },
+
+  "version": 0.4
+}
